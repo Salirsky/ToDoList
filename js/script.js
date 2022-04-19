@@ -47,8 +47,19 @@ todoControl.addEventListener("submit", function (event) {
   const newToDo = {
     text: headerInput.value,
     completed: false,
-  }; // Отправляем новый объект в массив toDoData:
-  toDoData.push(newToDo);
-  headerInput.value = ""; // очищаем поле ввода
-  render(); // render выводит содержимое массива toDoData
+  };
+  console.log(headerInput.value);
+  // Проверяем, содержит ли headerInput.value данные
+  if (headerInput.value !== "") {
+    // Отправляем новый объект в массив toDoData:
+    toDoData.push(newToDo);
+    headerInput.value = ""; // очищаем поле ввода
+    render(); // render выводит содержимое массива toDoData
+  }
 });
+
+// ДЗ:
+// Реализовать удаление задач по нажатию на корзину
+// \/ Запретить добавлять задачи, пока value пуст
+// При каждом добавлении задачи массив todoData сохранять в localStorage
+// А при перезагрузке страницы необходимо извлекать эту информацию и заносить её в todoData
