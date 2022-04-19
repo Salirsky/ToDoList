@@ -2,6 +2,7 @@ const todoControl = document.querySelector(".todo-control");
 const headerInput = document.querySelector(".header-input");
 const todoList = document.querySelector(".todo-list");
 const todoCompleted = document.querySelector(".todo-completed");
+//const todoRemove = document.querySelector(".todo-remove");
 
 // Массив для новых задач:
 const toDoData = [];
@@ -35,6 +36,11 @@ const render = function () {
     li.querySelector(".todo-complete").addEventListener("click", function () {
       item.completed = !item.completed; // Меняем свойство на противоположное
       render();
+    });
+
+    // Удаляем элемент по клику на корзину:
+    li.querySelector(".todo-remove").addEventListener("click", function () {
+      li.remove();
     });
   });
 };
