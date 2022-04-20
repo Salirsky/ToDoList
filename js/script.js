@@ -2,21 +2,30 @@ const todoControl = document.querySelector(".todo-control");
 const headerInput = document.querySelector(".header-input");
 const todoList = document.querySelector(".todo-list");
 const todoCompleted = document.querySelector(".todo-completed");
-//const todoRemove = document.querySelector(".todo-remove");
 
 // Массив для новых задач:
-let toDoData = [];
+// let toDoData = [];
+
+// Создаём массив элементов списка и записываем в него данные из хранилища. Если данных нет - массив пуст.
+let toDoData = localStorage.getItem("items") // Если в хранилище есть данные, то
+  ? JSON.parse(localStorage.getItem("items")) // Мы вернём их в toDoData
+  : []; // Иначе - страница будет пуста
+
+// Сохранять данные массива toDoData в localStorage:
+localStorage.setItem("items", JSON.stringify(toDoData));
+console.log("toDoData", JSON.stringify(toDoData));
+// Создаём переменную data, в которую записываем информацию из хранилища по ключу "items"
+const data = JSON.parse(localStorage.getItem("items"));
+console.log(data);
 
 // Функция-рендер, которая будет отрисовывать все наши toDo:
 const render = function () {
-  // Сохранять данные массива toDoData в localStorage:
-  localStorage.setItem("toDoData", JSON.stringify(toDoData));
-  console.log("toDoData", JSON.stringify(toDoData));
-  // Получаем массив обратно:
-  toDoData = JSON.parse(localStorage.getItem("toDoData"));
-  console.log(toDoData);
-  // Здесь хотя бы галочки "выполнено" отрабатывают, но тоже при обновлении страницы инфа на странице не сохраняется.
-  // Сейчас я не могу удалить из хранилища один элемент списка
+  //   //Сохранять данные массива toDoData в localStorage:
+  //   localStorage.setItem("items", JSON.stringify(toDoData));
+  //   console.log("toDoData", JSON.stringify(toDoData));
+  //   // Создаём переменную data, в которую записываем информацию из хранилища по ключу "items"
+  //   const data = JSON.parse(localStorage.getItem("items"));
+  //   console.log(data);
 
   todoList.innerHTML = ""; // Обнуляем список невыполненных задач
   todoCompleted.innerHTML = ""; // Обнуляем список выполненных задач
@@ -51,7 +60,6 @@ const render = function () {
     // Удаляем элемент по клику на корзину:
     li.querySelector(".todo-remove").addEventListener("click", function () {
       li.remove();
-      localStorage.removeItem("toDoData"); // Нужно передавать "key", по которому будет удаляться значение из хранилища. Сейчас наш "key" -весь массив со всеми данными. Для отдельных элементов списка у нас нет ключа.
     });
   });
 };
@@ -70,34 +78,23 @@ todoControl.addEventListener("submit", function (event) {
   if (headerInput.value !== "") {
     // Отправляем новый объект в массив toDoData:
     toDoData.push(newToDo);
+    localStorage.setItem("items", JSON.stringify(toDoData)); // Добавляем в хранилище новое значение с уже обновлённым массивом
 
-    // В localStorage данные есть, но при перезагрузке страницы они не появляются на странице и не реагируют на кнопку "выполнено"
     headerInput.value = ""; // очищаем поле ввода
 
     render(); // render выводит содержимое массива toDoData
   }
 });
 
-// const storageArr = function () {
-//   // Сохранять данные массива toDoData в localStorage:
-//   localStorage.setItem("toDoData", JSON.stringify(toDoData));
-//   console.log("toDoData", JSON.stringify(toDoData));
-//   // Получаем массив обратно:
-//   toDoData = JSON.parse(localStorage.getItem("toDoData"));
-//   console.log(toDoData);
-// };
+// Сохраняем информацию на странице при перезагрузке страницы:
 
-// // Через строку работать не будет
-// const storageStr = function () {
-//   // Сохранять данные массива toDoData в localStorage:
-//   localStorage.setItem("newToDo", JSON.stringify(newToDo));
-//   console.log("newToDo", JSON.stringify(newToDo));
-//   // Получаем массив обратно:
-//   newToDo = JSON.parse(localStorage.getItem("newToDo"));
-//   console.log(newToDo);
-// };
-// ДЗ:
+data.forEach((item) => {
+  render(item); // Делаем список на основе данных из хранилища
+});
+
 // \/ Реализовать удаление задач по нажатию на корзину
 // \/ Запретить добавлять задачи, пока value пуст
-// При каждом добавлении задачи массив todoData сохранять в localStorage
-// А при перезагрузке страницы необходимо извлекать эту информацию и заносить её в todoData
+// \/ При каждом добавлении задачи массив todoData сохранять в localStorage
+// \/ А при перезагрузке страницы необходимо извлекать эту информацию и заносить её в todoData
+
+// Но у нас пока не сохраняются данные о выполненных планах - и корзина не удаляет item из хранилища
