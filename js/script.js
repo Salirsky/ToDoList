@@ -3,33 +3,22 @@ const headerInput = document.querySelector(".header-input");
 const todoList = document.querySelector(".todo-list");
 const todoCompleted = document.querySelector(".todo-completed");
 
-// Массив для новых задач:
-// let toDoData = [];
-
 // Создаём массив элементов списка и записываем в него данные из хранилища. Если данных нет - массив пуст.
 let toDoData = localStorage.getItem("items") // Если в хранилище есть данные, то
   ? JSON.parse(localStorage.getItem("items")) // Мы вернём их в toDoData
   : []; // Иначе - страница будет пуста
 
-// Сохранять данные массива toDoData в localStorage:
-//localStorage.setItem("items", JSON.stringify(toDoData));
-//console.log("toDoData", JSON.stringify(toDoData));
-// Создаём переменную data, в которую записываем информацию из хранилища по ключу "items"
-const data = JSON.parse(localStorage.getItem("items"));
-console.log(data);
+toDoData = JSON.parse(localStorage.getItem("items"));
 
 // Функция-рендер, которая будет отрисовывать все наши toDo:
 const render = function () {
-  //Сохранять данные массива toDoData в localStorage:
+  //Сохраняем данные массива toDoData в localStorage:
   localStorage.setItem("items", JSON.stringify(toDoData));
-  console.log("toDoData", JSON.stringify(toDoData));
-  //   // Создаём переменную data, в которую записываем информацию из хранилища по ключу "items"
-  //   const data = JSON.parse(localStorage.getItem("items"));
 
   todoList.innerHTML = ""; // Обнуляем список невыполненных задач
   todoCompleted.innerHTML = ""; // Обнуляем список выполненных задач
 
-  toDoData.forEach(function (item) {
+  toDoData.forEach(function (item, index) {
     const li = document.createElement("li"); // создаём новый элемент li.
     li.classList.add("todo-item");
 
@@ -58,7 +47,17 @@ const render = function () {
 
     // Удаляем элемент по клику на корзину:
     li.querySelector(".todo-remove").addEventListener("click", function () {
+      console.log("Удалённый элемент списка " + li);
       li.remove();
+      // Мы удалили элемент со страницы, но не из хранилища данных.
+      // Чтобы удалить элемент из хранилища, нужно извлечь массив из localStorage, поменять его, и обратно полностью записать.
+
+      // Извлекаем массив из хранилища:
+      toDoData = JSON.parse(localStorage.getItem("items"));
+      // Удаляем элемент из массива:
+      toDoData.splice(index, 1);
+      // Перезаписываем информацию с учётом удалённого элемента:
+      localStorage.setItem("items", JSON.stringify(toDoData));
     });
   });
 };
@@ -72,7 +71,7 @@ todoControl.addEventListener("submit", function (event) {
     text: headerInput.value,
     completed: false,
   };
-  //console.log(headerInput.value);
+
   // Проверяем, содержит ли headerInput.value данные
   if (headerInput.value !== "") {
     // Отправляем новый объект в массив toDoData:
@@ -87,7 +86,7 @@ todoControl.addEventListener("submit", function (event) {
 
 // Сохраняем информацию на странице при перезагрузке страницы:
 
-data.forEach((item) => {
+toDoData.forEach((item) => {
   render(item); // Делаем список на основе данных из хранилища
 });
 
@@ -96,4 +95,4 @@ data.forEach((item) => {
 // \/ При каждом добавлении задачи массив todoData сохранять в localStorage
 // \/ А при перезагрузке страницы необходимо извлекать эту информацию и заносить её в todoData
 
-// Но пока не реализовано удаление данных из хранилища при нажатии на корзину
+// \/ Также реализовано удаление данных из хранилища при нажатии на корзину
