@@ -12,20 +12,19 @@ let toDoData = localStorage.getItem("items") // Если в хранилище �
   : []; // Иначе - страница будет пуста
 
 // Сохранять данные массива toDoData в localStorage:
-localStorage.setItem("items", JSON.stringify(toDoData));
-console.log("toDoData", JSON.stringify(toDoData));
+//localStorage.setItem("items", JSON.stringify(toDoData));
+//console.log("toDoData", JSON.stringify(toDoData));
 // Создаём переменную data, в которую записываем информацию из хранилища по ключу "items"
 const data = JSON.parse(localStorage.getItem("items"));
 console.log(data);
 
 // Функция-рендер, которая будет отрисовывать все наши toDo:
 const render = function () {
-  //   //Сохранять данные массива toDoData в localStorage:
-  //   localStorage.setItem("items", JSON.stringify(toDoData));
-  //   console.log("toDoData", JSON.stringify(toDoData));
+  //Сохранять данные массива toDoData в localStorage:
+  localStorage.setItem("items", JSON.stringify(toDoData));
+  console.log("toDoData", JSON.stringify(toDoData));
   //   // Создаём переменную data, в которую записываем информацию из хранилища по ключу "items"
   //   const data = JSON.parse(localStorage.getItem("items"));
-  //   console.log(data);
 
   todoList.innerHTML = ""; // Обнуляем список невыполненных задач
   todoCompleted.innerHTML = ""; // Обнуляем список выполненных задач
@@ -97,4 +96,4 @@ data.forEach((item) => {
 // \/ При каждом добавлении задачи массив todoData сохранять в localStorage
 // \/ А при перезагрузке страницы необходимо извлекать эту информацию и заносить её в todoData
 
-// Но у нас пока не сохраняются данные о выполненных планах - и корзина не удаляет item из хранилища
+// Но пока не реализовано удаление данных из хранилища при нажатии на корзину
